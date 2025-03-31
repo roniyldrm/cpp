@@ -1,0 +1,5 @@
+if you want to use templates and want them to work with every type you will see some types wont work then you have to specialize your template class of function or whatever
+    and make compiler choose the right implementation
+    
+all of these are alternative ways to choose the right implementation of a struct,class,function.. over using SFIANE 
+
