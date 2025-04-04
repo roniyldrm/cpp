@@ -45,7 +45,7 @@ typename S::IpV6 getAddress (S& sensor) { //
 } 
 
 /*
-Yes, exactly! If you write T::something, the compiler treats something as a dependent name because its meaning depends on T, which is a template parameter. Until the template is instantiated with a concrete type, the compiler does not know what T::something refers to.
+If you write T::something, the compiler treats something as a dependent name because its meaning depends on T, which is a template parameter. Until the template is instantiated with a concrete type, the compiler does not know what T::something refers to.
 
 What Does the Compiler Assume?
 When the compiler sees T::something, it does not assume that:
