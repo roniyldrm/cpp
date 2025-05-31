@@ -7,7 +7,7 @@ class my_array{
     private:
         using ref_type = const _Ty&;
         using ptr_type = const _Ty*;
-        using value_type = _Ty;
+        using val_type = _Ty;
 
         class iterator{
             private:
