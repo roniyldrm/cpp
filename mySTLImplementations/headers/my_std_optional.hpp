@@ -49,6 +49,14 @@ class my_optional{
                                                                     //should be changed via swap() ???
             }
         }
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        template<typename...Types>
+        constexpr my_optional& operator=(Types&&...Args) const{
+            if(!this->has_value){
+                new (&buffer[0]) val_type{ std:forward<val_type>(o)};//i thought it as 1 time initialized only 
+                                                                    //should be changed via swap() ???
+            }
+        }
 
 
         //functions
