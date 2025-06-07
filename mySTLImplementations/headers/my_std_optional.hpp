@@ -13,8 +13,9 @@ class my_optional{
         //constructers
         my_optional() = delete;
         
-        my_optional(val_type&& o) : has_value(true){
-            new (&buffer[0]) val_type{ std:forward<val_type>(o)};
+        template<typename T>
+        my_optional(T&& o) : has_value(true){
+            new (&buffer[0]) val_type{ std:forward<T>(o)};
         }
 
         template<typename...Types>
@@ -43,22 +44,22 @@ class my_optional{
         constexpr const val_type&& operator*() const &&{}
         //TODO implement all operators for each optional type lv ,rv, const lv, const rv
 
-        constexpr val_type* operator->() &{
+        constexpr val_type* operator->(); &{
             if (!this->has_value){
                 throw std::logic_error("")
             }
             return std::launder(reinterpret_cast<val_type*>(&buffer[0]));
         }
 
-        constexpr val_type* operator->() &&{}
-        constexpr const val_type* operator->() const &{}
-        constexpr const val_type* operator->() const &&{}
+        // constexpr val_type* operator->() &&{}
+        // constexpr const val_type* operator->() const &{}
+        // constexpr const val_type* operator->() const &&{}
 
 
-
-        constexpr my_optional& operator=(val_type&& o) const{
+        template<typename T>
+        constexpr my_optional& operator=(T&& o) const{
             if(!this->has_value){
-                new (&buffer[0]) val_type{ std:forward<val_type>(o)};//i thought it as 1 time initialized only 
+                new (&buffer[0]) val_type{ std:forward<T>(o)};//i thought it as 1 time initialized only 
                                                                     //should be changed via swap() ???
             }
         }
@@ -86,8 +87,15 @@ class my_optional{
             } 
         }
 
-        constexpr my_optional& swap(val_type&& o){
-            //?? dont know what it could be used for 
+        template<typename T>
+        constexpr void swap(T&& o){
+            val_type copy = this->operator*();
+            if constexpr (is_same_v<T::val_type,val_type>){
+                new (&buffer[0]) val_type{ *(std::forward<T>(o))};
+                new (&t.buffer[0]) val_type{*(std::move(copy))};
+            }
+
         }
+
 
 };
