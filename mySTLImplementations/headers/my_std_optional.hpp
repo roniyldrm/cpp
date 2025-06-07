@@ -21,9 +21,6 @@ class my_optional{
         my_optional(Types&&...args) : has_value(true){
             new (&buffer[0]) val_type{ std::forward<Types>(args)...};
         }
-
-
-        //~my_optional(){}
         
     public:
         
