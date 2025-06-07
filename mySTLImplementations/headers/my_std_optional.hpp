@@ -46,6 +46,7 @@ class my_optional{
             return std::move(*std::launder(reinterpret_cast<val_type*>(&buffer[0])));
         }
 
+<<<<<<< HEAD
         constexpr const val_type& operator*() const &{
             if (!this->has_value){
                 throw std::logic_error("")
@@ -68,16 +69,29 @@ class my_optional{
         }
         
         constexpr const val_type* operator->() const{
+=======
+        constexpr val_type* operator->(); &{
+>>>>>>> fe9f067368748e22283cdb48d53eb0bd71864a3b
             if (!this->has_value){
                 throw std::logic_error("")
             }
             return std::launder(reinterpret_cast<val_type*>(&buffer[0]));
         }
 
+<<<<<<< HEAD
         template<typename T>
         constexpr my_optional& operator=(T&& o) const{
             if(this->has_value){ this->reset();}
             
+=======
+        // constexpr val_type* operator->() &&{}
+        // constexpr const val_type* operator->() const &{}
+        // constexpr const val_type* operator->() const &&{}
+
+
+        template<typename T>
+        constexpr my_optional& operator=(T&& o) const{
+>>>>>>> fe9f067368748e22283cdb48d53eb0bd71864a3b
             if(!this->has_value){
                 new (&buffer[0]) val_type{ std:forward<T>(o)};//i thought it as 1 time initialized only 
                                                                     //should be changed via swap() ???
