@@ -10,6 +10,8 @@ int main() {
     auto& r1 = *o1;
     auto& r2 = *o2;
 
+    
+
     std::cout << std::boolalpha;
     std::cout << std::is_lvalue_reference_v<decltype(*o1)> << "\n";          // true
     std::cout << std::is_lvalue_reference_v<decltype(*o2)> << "\n";          // true

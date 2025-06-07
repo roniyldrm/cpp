@@ -1,0 +1,15 @@
+C++’s strict aliasing rules and object lifetime rules mean that just writing to raw memory and casting doesn’t always make the compiler recognize that a valid object lives there now.
+
+Especially since C++17, the standard says:
+
+If you use placement new on a buffer and access it through an old pointer, the behavior is undefined — unless you use std::launder.
+
+So this is valid:
+
+new (&buffer[0]) T{...};  // placement new
+return *std::launder(reinterpret_cast<T*>(&buffer[0])); // OK ✅
+But this is undefined:
+
+
+new (&buffer[0]) T{...};
+return *reinterpret_cast<T*>(&buffer[0]); // ❌ UB (undefined behavior)
