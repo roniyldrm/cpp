@@ -9,9 +9,10 @@ class my_optional{
 
         bool has_value;
         alignas(val_type) char buffer[sizeof(val_type)];
-
+        
+        public:
         //constructers
-        my_optional() = delete;
+        my_optional() noexcept : has_value(false){};
         
         template<typename T>
         my_optional(T&& o) : has_value(true){
@@ -23,14 +24,14 @@ class my_optional{
             new (&buffer[0]) val_type{ std::forward<Types>(args)...};
         }
         
-    public:
         
         //operators
         constexpr bool operator bool(){ return has_value;}
+        constexpr const bool operator bool() const{ return has_value;}
         
         constexpr val_type& operator*() &{ 
             if (!this->has_value){
-                throw std::logic_error("")
+                throw std::logic_error("empty");
             } 
             return *std::launder(reinterpret_cast<val_type*>(&buffer[0]));
             //? i used launder to safely inform compiler that a new object was constructed via placement new 
@@ -39,61 +40,74 @@ class my_optional{
             
         }
 
-        constexpr val_type&& operator*() && {
+        constexpr val_type&& operator*() &&{
             if (!this->has_value){
-                throw std::logic_error("")
+                throw std::logic_error("empty");
             } 
             return std::move(*std::launder(reinterpret_cast<val_type*>(&buffer[0])));
         }
 
         constexpr const val_type& operator*() const &{
             if (!this->has_value){
-                throw std::logic_error("")
+                throw std::logic_error("empty");
             } 
             return *std::launder(reinterpret_cast<val_type*>(&buffer[0]));
         }
 
         constexpr const val_type&& operator*() const &&{
             if (!this->has_value){
-                throw std::logic_error("")
+                throw std::logic_error("empty");
             } 
             return std::move(*std::launder(reinterpret_cast<val_type*>(&buffer[0])));
         }
 
         constexpr val_type* operator->(){
             if (!this->has_value){
-                throw std::logic_error("")
+                throw std::logic_error("empty");
             }
             return std::launder(reinterpret_cast<val_type*>(&buffer[0]));
         }
         
         constexpr const val_type* operator->() const{
             if (!this->has_value){
-                throw std::logic_error("")
+                throw std::logic_error("empty");
             }
             return std::launder(reinterpret_cast<val_type*>(&buffer[0]));
         }
 
         template<typename T>
-        constexpr my_optional& operator=(T&& o) const{
+        constexpr my_optional& operator=(T&& o) {
             if(this->has_value){ this->reset();}
             
             if(!this->has_value){
-                new (&buffer[0]) val_type{ std:forward<T>(o)};//i thought it as 1 time initialized only 
-                                                                    //should be changed via swap() ???
+                new (&buffer[0]) val_type{ std::forward<T>(o)};
             }
         }
 
         template<typename...Types>
-        constexpr my_optional& operator=(Types&&...Args) const{
+        constexpr my_optional& operator=(Types&&...Args) {
             if(this->has_value){ this->reset();}            
             new (&buffer[0]) val_type{ std::forward<Types>(Args)...};
             
         }
 
         //functions
-        
-        constexpr bool has_value() const{ return has_value;}
+        constexpr bool has_val() const{ return has_value;}
+
+        constexpr val_type& value(){
+            if (!this->has_value){
+                throw std::logic_error("empty");
+            }
+            return *std::launder(reinterpret_cast<val_type*>(&buffer[0])) : 
+        }
+
+        constexpr const val_type& value() const{
+            if (!this->has_value){
+                throw std::logic_error("empty");
+            }
+            return *std::launder(reinterpret_cast<val_type*>(&buffer[0])) : 
+        }
+
         
         constexpr void reset(){
             this->has_value = false;  
@@ -101,10 +115,11 @@ class my_optional{
         }
         
         template<typename...Types>
-        constexpr val_type& emplace(Types&&...Args) const{
+        constexpr val_type& emplace(Types&&...Args) {
             if(this->has_value){ this->reset();}
 
             new (&buffer[0]) val_type{ std::forward<Types>(Args)...};
+            return *this;
         }
         
         template<typename T>

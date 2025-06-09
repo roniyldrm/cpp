@@ -13,3 +13,14 @@ But this is undefined:
 
 new (&buffer[0]) T{...};
 return *reinterpret_cast<T*>(&buffer[0]); // ❌ UB (undefined behavior)
+
+
+
+static_cast<T&&>(expr) is legal if expr is of type T
+
+But to do that, expr must be a real object of type T, not untyped memory (char buffer)
+
+So you must go through reinterpret_cast<T*> and std::launder to legally and safely recover a T& before you can cast or move it
+
+buffer[0] is a char&
+static_cast<val_type&&>(char&) is invalid, there's no conversion from char& to val_type&&
