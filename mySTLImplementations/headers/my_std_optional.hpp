@@ -125,7 +125,7 @@ class my_optional{
             if(this->has_value){ this->reset();}
 
             new (&buffer[0]) val_type{ std::forward<Types>(Args)...};
-            return *this;
+            return **this;
         }
         
         template<typename T>

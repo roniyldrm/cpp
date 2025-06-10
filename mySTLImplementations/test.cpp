@@ -22,7 +22,7 @@ int main(){
     std::cout << opt.value().second;
 
     opt = std::pair<int,std::string>{1000,"abcde"};
-    opt = {1,2000,"aaa"};
+    opt = {2000,"aaa"};
 
     opt2.emplace(1500,"asdasda");
     
