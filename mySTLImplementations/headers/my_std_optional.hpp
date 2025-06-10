@@ -32,7 +32,7 @@ class my_optional{
         constexpr my_optional(Types&&...args) : has_value(true){
             new (&buffer[0]) val_type{ std::forward<Types>(args)...};
         }
-        
+
         //operators
         constexpr bool operator bool(){ return has_value;}
         constexpr const bool operator bool() const{ return has_value;}
@@ -42,12 +42,10 @@ class my_optional{
                 throw std::logic_error("empty");
             } 
             return *std::launder(reinterpret_cast<val_type*>(&buffer[0]));
-            //? i used launder to safely inform compiler that a new object was constructed via placement new 
-            //? returns pointer to the same type you give it,
-            //? but with the guarantee that the compiler knows a new object was created at that memory address.
-            
         }
-
+        //? i used launder to safely inform compiler that a new object was constructed via placement new 
+        //? returns pointer to the same type you give it,but with the guarantee that the compiler knows a new object was created at that memory address.
+            
         constexpr val_type&& operator*() &&{
             if (!this->has_value){
                 throw std::logic_error("empty");
@@ -134,7 +132,7 @@ class my_optional{
         constexpr void swap(T&& o){
             using otherOpt = std::remove_cv_t<std::remove_reference_t<T>>;
             /* std::remove_reference_t<T> turns my_optional<T>& or my_optional<T>&& into my_optional<T>
-              std::remove_cv_t removes any const/volatile if present */
+              std::remove_cv_t removes any const if present */
 
             if constexpr (is_same_v< otherOpt,my_optional<val_type> >){
                 val_type copy = std::move(this->operator*());
