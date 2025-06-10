@@ -1,6 +1,13 @@
 #include <memory>
 #include <typeinfo>
 #include <stdexcept>
+
+struct my_nullopt_t {
+    explicit constexpr my_nullopt_t(int){}
+};
+
+inline constexpr my_nullopt_t my_nullopt{0};
+
 template<typename _Ty>
 class my_optional{
     private:
@@ -10,20 +17,21 @@ class my_optional{
         bool has_value;
         alignas(val_type) char buffer[sizeof(val_type)];
         
-        public:
         //constructers
+        public:
         my_optional() noexcept : has_value(false){};
-        
+
+        constexpr my_optional(my_nullopt_t) noexcept : has_value(false){};
+
         template<typename T>
-        my_optional(T&& o) : has_value(true){
+        constexpr my_optional(T&& o) : has_value(true){
             new (&buffer[0]) val_type{ std:forward<T>(o)};
         }
 
         template<typename...Types>
-        my_optional(Types&&...args) : has_value(true){
+        constexpr my_optional(Types&&...args) : has_value(true){
             new (&buffer[0]) val_type{ std::forward<Types>(args)...};
         }
-        
         
         //operators
         constexpr bool operator bool(){ return has_value;}

@@ -1,6 +1,13 @@
 #include <iostream>
 #include <optional>
 #include <type_traits>
+#include <pair>
+
+
+
+void func(std::pair<int,char*> myp){
+
+}
 
 int main() {
     int a = 5;
