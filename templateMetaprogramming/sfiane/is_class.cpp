@@ -5,7 +5,7 @@ private:
     static char test(int C::*);  // works only if C is a class type
 
     template<typename C>
-    static int test(...);        // fallback for non-class types
+    static int test();        // fallback for non-class types
 
 public:
     static constexpr bool value = sizeof(test<T>(0)) == sizeof(char);

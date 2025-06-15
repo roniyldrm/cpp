@@ -88,6 +88,7 @@ class my_optional{
             if(!this->has_value){
                 new (&buffer[0]) val_type{ std::forward<T>(o)};
             }
+            return *this;
         }
 
         template<typename...Types>
@@ -95,6 +96,7 @@ class my_optional{
             if(this->has_value){ this->reset();}            
             new (&buffer[0]) val_type{ std::forward<Types>(Args)...};
             
+            return *this;
         }
 
         //functions
@@ -129,11 +131,11 @@ class my_optional{
         }
         
         template<typename...Types>
-        constexpr val_type& emplace(Types&&...Args) {
+        constexpr my_optional& emplace(Types&&...Args) {
             if(this->has_value){ this->reset();}
 
             new (&buffer[0]) val_type{ std::forward<Types>(Args)...};
-            return **this;
+            return *this;
         }
         
         template<typename T>
