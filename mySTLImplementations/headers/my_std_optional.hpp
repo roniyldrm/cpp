@@ -114,6 +114,14 @@ class my_optional{
             return *std::launder(reinterpret_cast<val_type*>(&buffer[0])) : 
         }
 
+        template<typename... Types>
+        constexpr val_type& value_or(Types&&... Args){
+            if (!this->has_value){
+                new (&buffer[0]) val_type{std::forward<Types>(Args)...};
+            }
+            return *std::launder(reinterpret_cast<val_type*>(&buffer[0]));
+        }
+
         
         constexpr void reset(){
             this->has_value = false;  

@@ -45,4 +45,5 @@ int main(){
     std::string str2 = *fun(true);
     
     std::cout << str << str2;
+
 }
